@@ -11842,10 +11842,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 00ade550b4772e64285de450db28732c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1886912561}
+      addedObject: {fileID: 1886912560}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 00ade550b4772e64285de450db28732c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1886912560}
+      addedObject: {fileID: 1886912561}
   m_SourcePrefab: {fileID: 100100000, guid: 00ade550b4772e64285de450db28732c, type: 3}
 --- !u!1001 &1317684889
 PrefabInstance:
@@ -21895,7 +21895,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -21910,9 +21910,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1886912559}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d602954aa1fc42f4ca2ed6001d2f4be2, type: 3}
+  m_Script: {fileID: 11500000, guid: bff1b3ae2519c45489ab56724b7d5c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 487153315}
+  respawnPoint: {fileID: 413184795}
 --- !u!1 &1894885371
 GameObject:
   m_ObjectHideFlags: 0
