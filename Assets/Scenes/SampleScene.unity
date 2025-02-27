@@ -3817,6 +3817,7 @@ MonoBehaviour:
   jumpForce: 6
   jumpCooldown: 0.25
   airMultiplier: 0.3
+  coyoteTime: 0.2
   crouchSpeed: 3.5
   crouchYScale: 0.5
   jumpKey: 32
