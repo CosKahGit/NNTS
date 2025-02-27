@@ -17,6 +17,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    public float coyoteTime; // Time buffer for jumping
 
     [Header("Crouching")]
     public float crouchSpeed;
@@ -43,6 +44,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    
 
     Vector3 moveDirection;
 
@@ -59,6 +61,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     }
 
     public bool wallrunning;
+    float coyoteTimeCounter;
 
     private void Start()
     {
@@ -75,15 +78,21 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
+
         MyInput();
         SpeedControl();
         StateHandler();
 
         // handle drag
         if (grounded)
+        {
             rb.drag = groundDrag;
+            coyoteTimeCounter = coyoteTime;
+        }
+            
         else
             rb.drag = 0;
+            coyoteTimeCounter -= Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -97,7 +106,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKey(jumpKey) && readyToJump && grounded && coyoteTimeCounter > 0)
         {
             readyToJump = false;
 
@@ -215,6 +224,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        coyoteTimeCounter = 0;
     }
     private void ResetJump()
     {
