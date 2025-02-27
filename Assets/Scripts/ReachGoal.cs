@@ -7,6 +7,6 @@ public class ReachGoal : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        SceneManager.LoadSceneAsync(0); 
+        SceneManager.LoadSceneAsync(1); 
     }
 }

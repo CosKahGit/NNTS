@@ -11,8 +11,25 @@ public class LevelSelect : MonoBehaviour
         Cursor.visible = true; 
     }
 
+    public void StartGame()
+    {
+        SceneManager.LoadSceneAsync(1);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     public void PlayDemo()
     {
-        SceneManager.LoadSceneAsync(1); 
+        SceneManager.LoadSceneAsync(2); 
     }
+
+    public void Back()
+    {
+        SceneManager.LoadSceneAsync(0); 
+    }
+
+
 }
