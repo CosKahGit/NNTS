@@ -12,6 +12,7 @@ public class NewBehaviourScript : MonoBehaviour
     private void Start()
     {
         timer = FindObjectOfType<Timer>();
+
     }
 
     private void OnTriggerEnter(Collider other)
