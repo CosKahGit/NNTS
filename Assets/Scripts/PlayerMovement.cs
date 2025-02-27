@@ -75,28 +75,33 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void Update()
     {
-        // ground check
+        // Ground check
+        bool wasGrounded = grounded; // Track previous grounded state
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-
 
         MyInput();
         SpeedControl();
         StateHandler();
 
-        // handle drag
+        // Handle drag and coyote time correctly
         if (grounded)
         {
             rb.drag = groundDrag;
-            coyoteTimeCounter = coyoteTime;
-        }
 
+            // Prevent instant double jump by resetting only if falling
+            if (!wasGrounded)
+            {
+                coyoteTimeCounter = coyoteTime;
+                readyToJump = true; // Reset jump ONLY when landing
+            }
+        }
         else
         {
             rb.drag = 0;
-            coyoteTimeCounter -= Time.deltaTime;
+            coyoteTimeCounter -= Time.deltaTime; // Decrease only when not grounded
         }
-
     }
+
 
     private void FixedUpdate()
     {
@@ -110,13 +115,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         // when to jump
         //if (Input.GetKey(jumpKey) && readyToJump && grounded && coyoteTimeCounter > 0)
-        if (Input.GetKey(jumpKey) && readyToJump && coyoteTimeCounter > 0)
-
+        if (Input.GetKeyDown(jumpKey) && readyToJump && coyoteTimeCounter > 0)
         {
-            readyToJump = false;
+            readyToJump = false; // Prevent multiple jumps
 
             Jump();
-            coyoteTimeCounter = 0;
+            coyoteTimeCounter = 0; // Reset to prevent multiple jumps
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -230,7 +234,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        
+        coyoteTimeCounter = 0;
+
     }
     private void ResetJump()
     {
