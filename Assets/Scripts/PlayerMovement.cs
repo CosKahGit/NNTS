@@ -89,10 +89,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
             rb.drag = groundDrag;
             coyoteTimeCounter = coyoteTime;
         }
-            
+
         else
+        {
             rb.drag = 0;
             coyoteTimeCounter -= Time.deltaTime;
+        }
+
     }
 
     private void FixedUpdate()
@@ -106,11 +109,14 @@ public class PlayerMovementAdvanced : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded && coyoteTimeCounter > 0)
+        //if (Input.GetKey(jumpKey) && readyToJump && grounded && coyoteTimeCounter > 0)
+        if (Input.GetKey(jumpKey) && readyToJump && coyoteTimeCounter > 0)
+
         {
             readyToJump = false;
 
             Jump();
+            coyoteTimeCounter = 0;
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -224,7 +230,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        coyoteTimeCounter = 0;
+        
     }
     private void ResetJump()
     {
