@@ -8975,8 +8975,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 754448361}
-        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
-        m_MethodName: Back
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+        m_MethodName: toMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9108,7 +9108,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 754448361}
-        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -27114,7 +27114,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 754448358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69da0b868271f8a46aa2a3fc702c0d27, type: 3}
+  m_Script: {fileID: 11500000, guid: c8be42ee881ebc24c817cc39bd332fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &786846978
