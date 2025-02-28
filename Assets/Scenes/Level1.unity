@@ -26274,7 +26274,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 934581069}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27928,6 +27928,7 @@ MonoBehaviour:
   jumpForce: 5
   jumpCooldown: 0.25
   airMultiplier: 0.3
+  coyoteTime: 0.2
   crouchSpeed: 3.5
   crouchYScale: 0.5
   jumpKey: 32
@@ -28325,7 +28326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1781312742}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Level1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
