@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LeaderBoard : MonoBehaviour
 {
-    private DeathCounter deathCounter = new DeathCounter();
-    private Timer timer = new Timer();
+    private DeathCounter deathCounter;
+    private Timer timer;
 
     private Transform entryContainer;
     private Transform entryTemplate;
