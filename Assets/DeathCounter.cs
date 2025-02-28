@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UIElements;
 
 public class DeathCounter : MonoBehaviour
 {
@@ -22,5 +23,9 @@ public class DeathCounter : MonoBehaviour
     private void UpdateDeathUI()
     {
         deathCounter.text = "Deaths: " + deaths;
+    }
+    public int getDeaths()
+    {
+        return deaths;
     }
 }

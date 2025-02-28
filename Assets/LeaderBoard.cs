@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LeaderBoard : MonoBehaviour
 {
+    private DeathCounter deathCounter = new DeathCounter();
+    private Timer timer = new Timer();
+
     private Transform entryContainer;
     private Transform entryTemplate;
     // Start is called before the first frame update
