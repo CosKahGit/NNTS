@@ -22,7 +22,7 @@ public class DeathCounter : MonoBehaviour
 
     private void UpdateDeathUI()
     {
-        deathCounter.text = "Deaths: " + deaths;
+        deathCounter.text = "Gen: " + deaths;
     }
     public int getDeaths()
     {
