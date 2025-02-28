@@ -1,11 +1,14 @@
+using Palmmedia.ReportGenerator.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Required for UI buttons
 
 public class NewBehaviourScript : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Transform respawnPoint;
+    [SerializeField] private Button resetUIButton; // Assign in Inspector
 
     private Timer timer;
     private DeathCounter deathCounter;
@@ -14,11 +17,31 @@ public class NewBehaviourScript : MonoBehaviour
     {
         timer = FindObjectOfType<Timer>();
         deathCounter = FindObjectOfType<DeathCounter>();
+
+        // Ensure button is linked (if assigned)
+        if (resetUIButton != null)
+        {
+            resetUIButton.onClick.AddListener(resetButton);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if (other.CompareTag("Player"))
+        {
+            ResetPlayer();
+        }
+    }
+
+   
+    public void resetButton()
+    {
+        ResetPlayer();
+    }
+
+    private void ResetPlayer()
+    {
+        Rigidbody rb = player.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
@@ -37,5 +60,8 @@ public class NewBehaviourScript : MonoBehaviour
         {
             deathCounter.Increment();
         }
+
+        Debug.Log("Player Reset via Button!");
     }
 }
+
