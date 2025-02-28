@@ -21,9 +21,14 @@ public class LevelSelect : MonoBehaviour
         Application.Quit();
     }
 
-    public void PlayDemo()
+    public void PlayLevel1()
     {
         SceneManager.LoadSceneAsync(2); 
+    }
+
+    public void PlayDemo()
+    {
+        SceneManager.LoadSceneAsync(3); 
     }
 
     public void Back()
