@@ -179,6 +179,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
+            if (verticalInput < 0) // If pressing "S"
+            {
+                moveSpeed *= 0.7f; // Reduce speed to 70% of normal speed
+            }
             PC.DoFov(80);
         }
 
@@ -191,29 +195,39 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void MovePlayer()
     {
-        // calculate movement direction
+        // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
+        // Reduce speed when moving backward (both on ground and in air)
+        float adjustedSpeed = moveSpeed;
+        if (verticalInput < 0) // If pressing "S"
+        {
+            adjustedSpeed *= 0.7f; // Reduce speed by 30%
+        }
+
+        // On slope
         if (OnSlope() && !exitingSlope)
         {
-            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+            rb.AddForce(GetSlopeMoveDirection() * adjustedSpeed * 20f, ForceMode.Force);
 
             if (rb.velocity.y > 0)
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
-
-        // on ground
+        // On ground
         else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        {
+            rb.AddForce(moveDirection.normalized * adjustedSpeed * 10f, ForceMode.Force);
+        }
+        // In air (apply airMultiplier)
+        else
+        {
+            rb.AddForce(moveDirection.normalized * adjustedSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
 
-        // in air
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        // turn gravity off while on slope
-        if(!wallrunning) rb.useGravity = !OnSlope();
+        // Turn gravity off while on a slope
+        if (!wallrunning) rb.useGravity = !OnSlope();
     }
+
 
     private void SpeedControl()
     {
