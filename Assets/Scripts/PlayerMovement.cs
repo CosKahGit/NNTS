@@ -124,7 +124,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         // when to jump
         //if (Input.GetKey(jumpKey) && readyToJump && grounded && coyoteTimeCounter > 0)
-        if (Input.GetKeyDown(jumpKey) && readyToJump && coyoteTimeCounter > 0)
+        if (Input.GetKey(jumpKey) && readyToJump && coyoteTimeCounter > 0)
         {
             readyToJump = false; // Prevent multiple jumps
 
