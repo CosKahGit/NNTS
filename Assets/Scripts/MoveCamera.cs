@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class MoveCamera : MonoBehaviour
 {
@@ -11,4 +13,9 @@ public class MoveCamera : MonoBehaviour
     {
         transform.position = cameraPosition.position;
     }
+    public void DoFov(float endValue)
+    {
+        GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
+    }
+
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class PlayerMovementAdvanced : MonoBehaviour
 {
@@ -44,6 +45,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+
+    PlayerCam PC;
     
 
     Vector3 moveDirection;
@@ -71,6 +74,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
         readyToJump = true;
 
         startYScale = transform.localScale.y;
+        PC = FindObjectOfType<PlayerCam>();
+
+        if (PC == null)
+        {
+            Debug.LogError("ERROR: PlayerCam script not found! Make sure it is attached to the camera.");
+        }
     }
 
     private void Update()
@@ -154,6 +163,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
+            PC.DoFov(70);
         }
 
         // Mode - Sprinting
@@ -161,6 +171,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
+            PC.DoFov(90);
         }
 
         // Mode - Walking
@@ -168,6 +179,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
+            PC.DoFov(80);
         }
 
         // Mode - Air
