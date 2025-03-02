@@ -155,6 +155,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             state = MovementState.wallrunning;
             moveSpeed = wallrunSpeed;
+            PC.DoFov(100);
         }
 
 
