@@ -113,8 +113,11 @@ public class LeaderBoard : MonoBehaviour
     {
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
-        return string.Format("{0:00}:{1:00}", minutes, seconds);
+        int milliseconds = Mathf.FloorToInt((time * 100) % 100); // Get the last two decimal places
+
+        return string.Format("{0:00}:{1:00},{2:00}", minutes, seconds, milliseconds);
     }
+
     public void ResetLeaderboard()
     {
         // Clear all previous runs
