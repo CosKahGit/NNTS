@@ -49,7 +49,7 @@ public class ReachGoal : MonoBehaviour
         // Sort runs by time (ascending)
         runs.Sort((a, b) => a.time.CompareTo(b.time));
 
-        // Keep only the top 5 runs
+        // Keep only the top runs
         int maxEntries = Mathf.Min(9, runs.Count);
         PlayerPrefs.SetInt("RunCount", maxEntries);
 
@@ -61,7 +61,7 @@ public class ReachGoal : MonoBehaviour
 
         PlayerPrefs.Save();
 
-        Debug.Log("Saved top 5 runs.");
+        Debug.Log("Saved top " + maxEntries + " runs." );
     }
 
 }
