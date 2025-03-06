@@ -23,14 +23,32 @@ public class ReachGoal : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
+        float time = timer != null ? timer.getTime() : 0;
+        int deaths = deathCounter != null ? deathCounter.getDeaths() : 0;
+        string currentLevel = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
         if (campaignManager != null)
         {
-            campaignManager.LevelCompleted(); // Move to next level
+            // Campaign Mode: Save total stats
+            campaignManager.LevelCompleted();
         }
         else
         {
-            // Normal single level play (fallback)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            // Single Level Mode: Save level-specific stats
+            SaveLevelRun(currentLevel, time, deaths);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
+    }
+
+    private void SaveLevelRun(string levelName, float time, int deaths)
+    {
+        int runCount = PlayerPrefs.GetInt(levelName + "_RunCount", 0);
+
+        PlayerPrefs.SetFloat(levelName + "_Time_" + runCount, time);
+        PlayerPrefs.SetInt(levelName + "_Deaths_" + runCount, deaths);
+        PlayerPrefs.SetInt(levelName + "_RunCount", runCount + 1);
+        PlayerPrefs.Save();
+
+        Debug.Log("Saved Run for " + levelName + " - Time: " + time + ", Deaths: " + deaths);
     }
 }

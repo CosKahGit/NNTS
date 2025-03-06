@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Hannes.unity
     guid: 991f76acd589b7448b925a62981ff9b6
+  - enabled: 1
+    path: Assets/Scenes/FinishScreen.unity
+    guid: f8a06d2c407ae7e4db2942ccfb105f8d
   m_configObjects: {}
