@@ -26007,7 +26007,7 @@ Transform:
   m_GameObject: {fileID: 754448358}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00075444655, y: 0.004436621, z: 0.000030365029, w: 0.99998987}
-  m_LocalPosition: {x: 222.72, y: 23.001, z: -256.056}
+  m_LocalPosition: {x: 223.00003, y: 24.75, z: -255.49927}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26935,6 +26935,10 @@ PrefabInstance:
     - target: {fileID: 4487699742676711389, guid: 9bb3e38df2b7fd4478b829b8d95ded0b, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4487699742676711389, guid: 9bb3e38df2b7fd4478b829b8d95ded0b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5028886977859510324, guid: 9bb3e38df2b7fd4478b829b8d95ded0b, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -28314,7 +28318,7 @@ Transform:
   m_GameObject: {fileID: 1665919015}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 222.71997, y: 23.001, z: -256.05673}
+  m_LocalPosition: {x: 223, y: 24.75, z: -255.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
