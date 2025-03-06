@@ -15,14 +15,14 @@ public class CampaignManager : MonoBehaviour
     private DeathCounter deathCounter;
 
     
-    private int[] levelSceneIndexes = { 2, 3, 4, 5 }; // Scene indexes for levels 1-4
+    private int[] levelSceneIndexes = { 2, 3, 4, 5 };
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this object across scenes
+            DontDestroyOnLoad(gameObject); // För att campaignen ska fungera så behöver man samma playerobject
         }
         else
         {
@@ -36,7 +36,7 @@ public class CampaignManager : MonoBehaviour
         LoadLevel(currentLevelIndex);
     }
 
-    public void RegisterComponents()
+    public void RegisterComponents()//Skickar till ReachGoal
     {
         timer = FindObjectOfType<Timer>();
         deathCounter = FindObjectOfType<DeathCounter>();
@@ -51,7 +51,7 @@ public class CampaignManager : MonoBehaviour
         }
         else
         {
-            EndCampaign(); // All levels completed
+            EndCampaign();
         }
     }
 
@@ -74,14 +74,28 @@ public class CampaignManager : MonoBehaviour
         }
     }
 
-    private void EndCampaign()
+    private void EndCampaign() //För att leaderboarden ska dyka upp efter spelet
     {
-        PlayerPrefs.SetFloat("TotalTime", totalTime);
-        PlayerPrefs.SetInt("TotalDeaths", totalDeaths);
+
+        if (totalTime <= 0f) //Sparade en 00:00 time hela tiden
+        {
+            return;
+        }
+
+
+        int runCount = PlayerPrefs.GetInt("Campaign_RunCount", 0); // PlayerPrefs gör att man kan spara inom Unity
+        runCount++;
+
+        PlayerPrefs.SetInt("Campaign_RunCount", runCount);  
+        PlayerPrefs.SetFloat($"Campaign_Time_{runCount}", totalTime);//Man sparar inom PlayerPrefs med Campaign_Time_i 
+        PlayerPrefs.SetInt($"Campaign_Deaths_{runCount}", totalDeaths);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene(6); // Load leaderboard or results scene
+        Debug.Log("Campaign Finished! Stats Saved.");
+
+        SceneManager.LoadScene(6); // Sista skärmen
     }
+
 
     public static CampaignManager GetInstance()
     {

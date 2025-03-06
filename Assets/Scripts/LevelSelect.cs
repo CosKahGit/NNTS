@@ -14,16 +14,34 @@ public class LevelSelect : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
-    public void StartCampaign()
+    public void GoBack()
     {
-        SceneManager.LoadScene(2); // Load Level 1
-        new GameObject("CampaignManager").AddComponent<CampaignManager>(); // Create the Campaign Manager
+        SceneManager.LoadSceneAsync(0);
     }
 
-    public void PlayLevel1() { SceneManager.LoadScene(2); } //TUTORIAL
-    public void PlayLevel2() { SceneManager.LoadScene(3); } //TUT 2
-    public void PlayLevel3() { SceneManager.LoadScene(4); } //DEMO
-    public void PlayLevel4() { SceneManager.LoadScene(5); } //HANNES
-    public void Back() { SceneManager.LoadScene(0); }
-    public void ExitGame() { Application.Quit(); }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void StartCampaign()
+    {
+        PlayerPrefs.SetInt("LastPlayedMode", 1); //Sätter till campaign
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene(2); //Level 1
+        new GameObject("CampaignManager").AddComponent<CampaignManager>(); //Campaign manager gör att man kan spara flera tider över flera levlar
+    }
+
+    public void PlayLevel1() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(2); }
+    public void PlayLevel2() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(3); }
+    public void PlayLevel3() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(4); }
+    public void PlayLevel4() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(5); }
+
+    private void SetSingleLevelMode()
+    {
+        PlayerPrefs.SetInt("LastPlayedMode", 0);//Sätter till 0
+        PlayerPrefs.Save();
+    }
+
 }

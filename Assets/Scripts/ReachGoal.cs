@@ -15,7 +15,7 @@ public class ReachGoal : MonoBehaviour
 
         if (campaignManager != null)
         {
-            campaignManager.RegisterComponents(); // Ensure stats are tracked
+            campaignManager.RegisterComponents(); //Får från Campaignmanager
         }
     }
 
@@ -27,14 +27,12 @@ public class ReachGoal : MonoBehaviour
         int deaths = deathCounter != null ? deathCounter.getDeaths() : 0;
         string currentLevel = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        if (campaignManager != null)
+        if (campaignManager != null)//Kollar ifall det är campaign
         {
-            // Campaign Mode: Save total stats
             campaignManager.LevelCompleted();
         }
         else
         {
-            // Single Level Mode: Save level-specific stats
             SaveLevelRun(currentLevel, time, deaths);
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
