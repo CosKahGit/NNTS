@@ -5,31 +5,27 @@ using UnityEngine;
 public class JumpPad : MonoBehaviour
 {
     public float jumpForce = 10f;
+    public float jumpBufferTime = 0.1f; // Delay to ensure consistent jump
+    private bool isJumping = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Something entered the jump pad!"); // Check if anything enters
-
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isJumping)
         {
-            Debug.Log("Player detected!"); // Check if the player is detected
-
             Rigidbody rb = other.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                Debug.Log("Rigidbody found! Applying force."); // Check if Rigidbody is found
-
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                isJumping = true; // Prevents multiple triggers
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                Invoke(nameof(ResetJump), jumpBufferTime); // Reset jump pad buffer
             }
-            else
-            {
-                Debug.Log("No Rigidbody found on Player!");
-            }
-        }
-        else
-        {
-            Debug.Log("Non-player object detected.");
         }
     }
+
+    private void ResetJump()
+    {
+        isJumping = false;
+    }
 }
+
