@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sens = 500f; // Default sensitivity
+    public float sens; // Default sensitivity
     public Slider slider; // Assigned via Inspector
 
     public Transform orientation;
