@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class LevelSelect : MonoBehaviour
 {
     private void Start()
     {
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true; 
+        Cursor.visible = true;
     }
 
     public void StartGame()
@@ -16,35 +14,34 @@ public class LevelSelect : MonoBehaviour
         SceneManager.LoadSceneAsync(1);
     }
 
+    public void GoBack()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+
     public void ExitGame()
     {
         Application.Quit();
     }
 
-    public void PlayLevel1()
+    public void StartCampaign()
     {
-        SceneManager.LoadSceneAsync(2); 
+        PlayerPrefs.SetInt("LastPlayedMode", 1); //Sätter till campaign
+        PlayerPrefs.Save();
+
+        SceneManager.LoadScene(2); //Level 1
+        new GameObject("CampaignManager").AddComponent<CampaignManager>(); //Campaign manager gör att man kan spara flera tider över flera levlar
     }
 
-    public void PlayLevel3()
-    {
-        SceneManager.LoadSceneAsync(3);
-    }
+    public void PlayLevel1() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(2); }
+    public void PlayLevel2() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(3); }
+    public void PlayLevel3() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(4); }
+    public void PlayLevel4() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(5); }
 
-    public void PlayDemo()
+    private void SetSingleLevelMode()
     {
-        SceneManager.LoadSceneAsync(5); 
+        PlayerPrefs.SetInt("LastPlayedMode", 0);//Sätter till 0
+        PlayerPrefs.Save();
     }
-
-    public void PlayLevel4()
-    {
-        SceneManager.LoadSceneAsync(4);
-    }
-
-    public void Back()
-    {
-        SceneManager.LoadSceneAsync(0); 
-    }
-
 
 }

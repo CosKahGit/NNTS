@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,61 +5,48 @@ public class ReachGoal : MonoBehaviour
 {
     private Timer timer;
     private DeathCounter deathCounter;
+    private CampaignManager campaignManager;
 
     private void Start()
     {
         timer = FindObjectOfType<Timer>();
         deathCounter = FindObjectOfType<DeathCounter>();
+        campaignManager = CampaignManager.GetInstance();
+
+        if (campaignManager != null)
+        {
+            campaignManager.RegisterComponents(); //Får från Campaignmanager
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        // Get current run stats
-        float lastRunTime = timer != null ? timer.getTime() : 0;
-        int lastRunDeaths = deathCounter != null ? deathCounter.getDeaths() : 0;
+        float time = timer != null ? timer.getTime() : 0;
+        int deaths = deathCounter != null ? deathCounter.getDeaths() : 0;
+        string currentLevel = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        // Save stats to PlayerPrefs
-        SaveRun(lastRunTime, lastRunDeaths);
-
-        // Load the leaderboard scene (or restart)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (campaignManager != null)//Kollar ifall det är campaign
+        {
+            campaignManager.LevelCompleted();
+        }
+        else
+        {
+            SaveLevelRun(currentLevel, time, deaths);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
+        }
     }
 
-    private void SaveRun(float time, int deaths)
+    private void SaveLevelRun(string levelName, float time, int deaths)
     {
-        List<(float time, int deaths)> runs = new List<(float, int)>();
+        int runCount = PlayerPrefs.GetInt(levelName + "_RunCount", 0);
 
-        int runCount = PlayerPrefs.GetInt("RunCount", 0);
-
-        // Load existing runs
-        for (int i = 0; i < runCount; i++)
-        {
-            float savedTime = PlayerPrefs.GetFloat("RunTime_" + i, 0);
-            int savedDeaths = PlayerPrefs.GetInt("RunDeaths_" + i, 0);
-            runs.Add((savedTime, savedDeaths));
-        }
-
-        // Add new run
-        runs.Add((time, deaths));
-
-        // Sort runs by time (ascending)
-        runs.Sort((a, b) => a.time.CompareTo(b.time));
-
-        // Keep only the top runs
-        int maxEntries = Mathf.Min(9, runs.Count);
-        PlayerPrefs.SetInt("RunCount", maxEntries);
-
-        for (int i = 0; i < maxEntries; i++)
-        {
-            PlayerPrefs.SetFloat("RunTime_" + i, runs[i].time);
-            PlayerPrefs.SetInt("RunDeaths_" + i, runs[i].deaths);
-        }
-
+        PlayerPrefs.SetFloat(levelName + "_Time_" + runCount, time);
+        PlayerPrefs.SetInt(levelName + "_Deaths_" + runCount, deaths);
+        PlayerPrefs.SetInt(levelName + "_RunCount", runCount + 1);
         PlayerPrefs.Save();
 
-        Debug.Log("Saved top " + maxEntries + " runs." );
+        Debug.Log("Saved Run for " + levelName + " - Time: " + time + ", Deaths: " + deaths);
     }
-
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI; // Required for UI elements
+using UnityEngine.UI;
 
 public class PlayerCam : MonoBehaviour
 {
@@ -20,9 +20,20 @@ public class PlayerCam : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        // Load sensitivity from PlayerPrefs
+        if (PlayerPrefs.HasKey("Sensitivity"))
+        {
+            sens = PlayerPrefs.GetFloat("Sensitivity");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("Sensitivity", sens); // Save default if not found
+            PlayerPrefs.Save();
+        }
+
         if (slider != null)
         {
-            slider.value = sens; // Ensure slider starts at correct value
+            slider.value = sens; // Set slider to saved value
             slider.onValueChanged.AddListener(sensChange); // Connect function to slider
         }
     }
@@ -55,5 +66,7 @@ public class PlayerCam : MonoBehaviour
     public void sensChange(float newSpeed)
     {
         sens = newSpeed; // Update mouse sensitivity
+        PlayerPrefs.SetFloat("Sensitivity", sens); // Save to PlayerPrefs
+        PlayerPrefs.Save();
     }
 }

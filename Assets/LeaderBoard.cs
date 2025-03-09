@@ -7,43 +7,78 @@ public class LeaderBoard : MonoBehaviour
 {
     private Transform entryContainer;
     private Transform entryTemplate;
+    private string currentLevel;
+    private bool isCampaign;
 
     private void Awake()
     {
         entryContainer = transform.Find("LeaderboardContainer");
-        if (entryContainer == null)
-        {
-            Debug.LogError(" ERROR: 'LeaderboardContainer' is missing! Make sure it's inside 'LeaderboardPanel'.");
-            return;
-        }
-
         entryTemplate = entryContainer.Find("LeaderboardEntryTemplate");
-        if (entryTemplate == null)
+
+        if (entryContainer == null || entryTemplate == null)
         {
-            Debug.LogError(" ERROR: 'LeaderboardEntryTemplate' is missing! Make sure it's inside 'LeaderboardContainer'.");
+            Debug.LogError(" Leaderboard UI missing");
             return;
         }
 
-        entryTemplate.gameObject.SetActive(false);
+        entryTemplate.gameObject.SetActive(false);//Tar bort template texten
 
-        // Check if this is the first time running the game
-        if (!PlayerPrefs.HasKey("RunCount"))
+        currentLevel = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        isCampaign = PlayerPrefs.GetInt("LastPlayedMode", 0) == 1;
+
+        if (isCampaign)
         {
-            Debug.Log("No saved leaderboard found. Initializing default leaderboard.");
-            //SetDefaultLeaderboard();
+            Invoke(nameof(LoadCampaignLeaderboard), 0.2f);//Floaten ger en delay så det laddas korrekt, kan bli null error
         }
-
-        // Load leaderboard (either defaults or saved data)
-        LoadLeaderboard();
+        else
+        {
+            Invoke(nameof(LoadLevelLeaderboard), 0.2f);
+        }
     }
 
 
-    private void LoadLeaderboard()
+
+
+    private void LoadCampaignLeaderboard()
     {
-        int runCount = PlayerPrefs.GetInt("RunCount", 0);
+        int runCount = PlayerPrefs.GetInt("Campaign_RunCount", 0);
         if (runCount == 0)
         {
-            Debug.Log("No previous runs found.");
+            Debug.Log("No campaign runs");
+            return;
+        }
+
+        List<(float time, int deaths)> runs = new List<(float, int)>();
+
+        for (int i = 1; i <= runCount; i++) // Start at 1, since we now save multiple runs
+        {
+            float time = PlayerPrefs.GetFloat($"Campaign_Time_{i}", 0);
+            int deaths = PlayerPrefs.GetInt($"Campaign_Deaths_{i}", 0);
+            runs.Add((time, deaths));
+        }
+
+        runs.Sort((a, b) => a.time.CompareTo(b.time)); //Sorterar
+
+        int maxEntries = Mathf.Min(9, runs.Count);
+        for (int i = 0; i < maxEntries; i++)
+        {
+            AddEntry(runs[i].time, runs[i].deaths);
+        }
+
+        Debug.Log(" Loaded Top 9 Campaign Runs");
+    }
+
+
+
+    private void LoadLevelLeaderboard()
+    {
+        if (isCampaign) return; //Bug fix för att inte kunna kö campaign 
+
+        int runCount = PlayerPrefs.GetInt(currentLevel + "_RunCount", 0);
+        if (runCount == 0)
+        {
+            Debug.Log("No previous runs found for " + currentLevel);
             return;
         }
 
@@ -51,41 +86,21 @@ public class LeaderBoard : MonoBehaviour
 
         for (int i = 0; i < runCount; i++)
         {
-            float time = PlayerPrefs.GetFloat("RunTime_" + i, 0);
-            int deaths = PlayerPrefs.GetInt("RunDeaths_" + i, 0);
+            float time = PlayerPrefs.GetFloat(currentLevel + "_Time_" + i, 0);
+            int deaths = PlayerPrefs.GetInt(currentLevel + "_Deaths_" + i, 0);
             runs.Add((time, deaths));
         }
 
-        // Sort by fastest time
         runs.Sort((a, b) => a.time.CompareTo(b.time));
 
-        // Show top 5
         int maxEntries = Mathf.Min(9, runs.Count);
         for (int i = 0; i < maxEntries; i++)
         {
             AddEntry(runs[i].time, runs[i].deaths);
         }
+
+        Debug.Log("Loaded Top 9 Runs for " + currentLevel);
     }
-
-    /*private void SetDefaultLeaderboard()
-    {
-        // Default leaderboard values
-        float[] defaultTimes = { 20f, 25f, 30f, 35f, 40f }; // Times in seconds
-        int[] defaultDeaths = { 13, 16, 5, 84, 43 }; // Deaths for each entry
-
-        int maxEntries = defaultTimes.Length;
-        PlayerPrefs.SetInt("RunCount", maxEntries);
-
-        for (int i = 0; i < maxEntries; i++)
-        {
-            PlayerPrefs.SetFloat("RunTime_" + i, defaultTimes[i]);
-            PlayerPrefs.SetInt("RunDeaths_" + i, defaultDeaths[i]);
-        }
-
-        PlayerPrefs.Save();
-        Debug.Log("Default leaderboard set.");
-    }*/
-
 
 
 
@@ -99,46 +114,67 @@ public class LeaderBoard : MonoBehaviour
 
         if (timeText == null || deathText == null)
         {
-            Debug.LogError(" ERROR: 'TimeText' or 'DeathText' is missing inside 'LeaderboardEntryTemplate'.");
+            Debug.LogError("'TimeText' or 'DeathText' is missing inside 'LeaderboardEntryTemplate'");
             return;
         }
 
         timeText.text = FormatTime(time);
-        deathText.text = "" + deaths;
+        deathText.text = "" + deaths;//Gör till string
     }
-
-
 
     private string FormatTime(float time)
     {
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
-        int milliseconds = Mathf.FloorToInt((time * 100) % 100); // Get the last two decimal places
-
+        int milliseconds = Mathf.FloorToInt((time * 100) % 100);
         return string.Format("{0:00}:{1:00},{2:00}", minutes, seconds, milliseconds);
     }
 
     public void ResetLeaderboard()
     {
-        // Clear all previous runs
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
-
-        Debug.Log("Leaderboard reset. Setting default values...");
-
-        // Set the default leaderboard again
-        //SetDefaultLeaderboard();
-
-        // Clear the UI leaderboard entries
-        foreach (Transform child in entryContainer)
+        if (isCampaign)
         {
-            Destroy(child.gameObject);
+            int runCount = PlayerPrefs.GetInt("Campaign_RunCount", 0); //Får antalet runs för leaderboarden
+
+            
+            for (int i = 1; i <= runCount; i++)
+            {
+                PlayerPrefs.DeleteKey($"Campaign_Time_{i}");
+                PlayerPrefs.DeleteKey($"Campaign_Deaths_{i}");
+            }
+
+            PlayerPrefs.DeleteKey("Campaign_RunCount");
+
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey(currentLevel + "_RunCount");
+            for (int i = 0; i < 10; i++)
+            {
+                PlayerPrefs.DeleteKey(currentLevel + "_Time_" + i);
+                PlayerPrefs.DeleteKey(currentLevel + "_Deaths_" + i);
+            }
+            Debug.Log($"Reset Leaderboard for {currentLevel}");
         }
 
-        // Reload leaderboard to show default values
-        LoadLeaderboard();
+        PlayerPrefs.Save();
+
+        foreach (Transform child in entryContainer)//Tar bort alla entries
+        {
+            if (child != entryTemplate)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        if (isCampaign)
+        {
+            LoadCampaignLeaderboard();
+        }
+        else
+        {
+            LoadLevelLeaderboard();
+        }
+    }
     }
 
-
-
-}
