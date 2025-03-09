@@ -37,6 +37,7 @@ public class LevelSelect : MonoBehaviour
     public void PlayLevel2() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(3); }
     public void PlayLevel3() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(4); }
     public void PlayLevel4() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(5); }
+    public void PlayLevel5() { SetSingleLevelMode(); SceneManager.LoadSceneAsync(6); }
 
     private void SetSingleLevelMode()
     {

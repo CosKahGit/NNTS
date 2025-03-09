@@ -15,7 +15,7 @@ public class CampaignManager : MonoBehaviour
     private DeathCounter deathCounter;
 
     
-    private int[] levelSceneIndexes = { 2, 3, 4, 5 };
+    private int[] levelSceneIndexes = { 2, 3, 4, 5, 6 };
 
     private void Awake()
     {
