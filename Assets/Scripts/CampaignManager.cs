@@ -93,7 +93,7 @@ public class CampaignManager : MonoBehaviour
 
         Debug.Log("Campaign Finished! Stats Saved.");
 
-        SceneManager.LoadScene(6); // Sista skärmen
+        SceneManager.LoadScene(7); // Sista skärmen
     }
 
 
